@@ -1,0 +1,25 @@
+# useful to create conda or mamba virtual environnement and installations
+Miniforge >= Miniforge3-22.3.1-0
+
+# Install the ultralytics package from PyPI (recommended to not have to deal with dependencies)
+!pip install ultralytics
+ 
+ # Know graphic card features
+  sudo lshw -enable pci -class display # as sudo user
+  or 
+  lspci -vnn | grep -A 12 '\[030[02]\]' | grep -Ei "vga|3d|display|kernel"
+
+# First nvidia drivers installation on ubuntu 20.04 LTS
+    Add the PPA (Personal Parckages Archices) to your softwares sources
+    sudo add-apt-repository ppa:graphics-drivers/ppa 
+    # Update the packages list
+    sudo apt update
+    # List your devices drivers 
+    ubuntu-drivers devices
+    Pich one of the nvidia drivers then install ( try many if necessary)
+
+# update to the latest version if their needed
+    sudo add-apt-repository ppa:graphics-drivers/ppa # idem like line13
+    # update and ugrade
+    sudo apt update && sudo apt upgrade
+
