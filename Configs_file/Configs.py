@@ -1,8 +1,15 @@
+#Library
 import yaml
 from argparse import ArgumentParser
 
+#  
 
 class Config:
+
+    """
+    Manage configuration file with flexibility and modularity.
+    
+    """
 
     def __init__(self, config_path):
         with open(config_path, 'r') as file:

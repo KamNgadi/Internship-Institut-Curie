@@ -1,0 +1,25 @@
+# YAML CONFIGURATION FILE
+
+input_dir: ../home/kamenan/Documents/Stage Dev Deep Learning/YOLOV8 evaluation/
+output_dir: COCO_format
+
+# INITALS SETTINGS
+#project_dir: ../home/kamenan/Documents/Stage Dev Deep Learning/YOLOV8 evaluation/ # images and masks directory
+dataset: cellpose_data
+coco_style_dir: cellpose_COCO # images & masks for train and validation dataset with contours map to his COCO annotation file which is JSON format
+test_size: 0.2
+random_state: 42
+yolo_style_dir: cellpose_YOLO # transform prior coco format to format suitable for yolo which is YAML format
+
+# Datasets
+datasets:
+  - name: Cellpose1
+    path: /home/kamenan/Documents/Stage Dev Deep Learning/YOLOV8 evaluation/cellpose_data
+  - name: Cellpose2
+    path: /home/kamenan/Documents/Stage Dev Deep Learning/YOLOV8 evaluation/EvaluationV1.1
+  - name: NeurIPS
+    path: /home/kamenan/Documents/Stage Dev Deep Learning/YOLOV8 evaluation/EvaluationV1.2
+  
+#Models
+train:
+  
