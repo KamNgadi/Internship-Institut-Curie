@@ -25,74 +25,6 @@ import glob
 import cv2
 import json
 import shutil
-# Label IDs of the dataset representing different categories
-
-
-def convert_images(data_dir, input_format, unf_format):
-        """Convert all images in the given directory to the specified format, replacing existing files.
-        
-        Args:
-            img_dir: 
-        """
-        
-        supported_exts = set(input_format)
-        for filename in os.listdir(data_dir):
-            file_ext = filename.split('.')[-1].lower()
-            if file_ext in supported_exts:
-                img_path = os.path.join(data_dir, filename)
-                img = PIL.Image.open(img_path)
-                
-                output_filename = f"{os.path.splitext(filename)[0]}.{unf_format}"
-                output_path = os.path.join(data_dir, output_filename)
-                img.save(output_path)
-                
-                if file_ext != unf_format:
-                    os.remove(img_path)
-                
-                #print(f"Converted {filename} to {output_filename}")
-
-def get_img_mask_path(input_dir:str, img_format:str) -> list:
-        
-        """Retrieve image and mask paths from a given directory structure.
-        
-        Args:
-            input_dir: repository's path containing images and masks
-            img_format: images (masks and images format)
-
-        Return: List for every single images and masks path
-        """
-
-
-        imgs_paths = []
-        msks_paths = []
-
-        imgs_dir = os.path.join(input_dir, 'images')
-        msks_dir = os.path.join(input_dir, 'masks')
-
-         # Check if the directories exist
-        if not os.path.isdir(imgs_dir):
-            raise Exception(f"The directory {imgs_dir} does not exist. Please ensure the directory is named 'images'.")
-        if not os.path.isdir(msks_dir):
-            raise Exception(f"The directory {msks_dir} does not exist. Please ensure the directory is named 'masks'.")
-
-        #convert_images(imgs_dir, unf_ext)
-        #for subdir in os.listdir(msks_dir):
-        #    subdir_path = os.path.join(msks_dir, subdir)
-        #    if os.path.isdir(subdir_path):
-        #        convert_images(subdir_path, unf_ext)
-
-        for file in os.listdir(imgs_dir):
-            if file.split('.')[-1].lower() == img_format:
-                imgs_paths.append(os.path.join(imgs_dir, file))
-
-        for subdir in os.listdir(msks_dir):
-            subdir_path = os.path.join(msks_dir, subdir)
-            if os.path.isdir(subdir_path):
-                for file in os.listdir(subdir_path):
-                    if file.split('.')[-1].lower() == img_format:
-                        msks_paths.append(os.path.join(subdir_path, file))
-                    
-        return imgs_paths, msks_paths
         
 def display_images_with_annotations(image_paths, annotation_paths):
 
@@ -142,16 +74,6 @@ def display_images_with_annotations(image_paths, annotation_paths):
 
     plt.tight_layout()
     plt.show()
-
-# Get all image files
-image_dir = "yolo_dataset/train/images/"
-annotation_dir = "yolo_dataset/train/labels/"
-all_image_files = [f for f in os.listdir(image_dir) if f.endswith(('.tif', '.png'))]
-random_image_files = random.sample(all_image_files, 4)
-
-# Get corresponding annotation files
-image_paths = [os.path.join(image_dir, f) for f in random_image_files]
-annotation_paths = [os.path.join(annotation_dir, f.replace(".tif", ".txt")) for f in random_image_files]
 
 def convert_to_yolo(input_images_path, input_json_path, output_images_path, output_labels_path):
 
@@ -288,7 +210,17 @@ def create_yaml(input_json_path, output_yaml_path, train_path, val_path, test_pa
 
 
 
-
+def mask_to_polygons(mask):
+        """Draw contours around the mask."""
+        
+        contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        polygons = []
+        for contour in contours:
+            if len(contour) > 2:
+                poly = contour.reshape(-1).tolist()
+                if len(poly) > 4:
+                    polygons.append(poly)
+        return polygons
 
 def process_masks(mask_paths: str, output_dir: str, category_ids:dict, MASKS_EXT, ORIGINAL_EXT) -> None:
   
@@ -363,8 +295,6 @@ def process_masks(mask_paths: str, output_dir: str, category_ids:dict, MASKS_EXT
     images = []
     image_id = 0
     ann_id = 0
-    #MASKS_EXT = 'tif'
-    #ORIGINAL_EXT = 'tif'
 
     for category in category_ids.keys():
         for mask_image in glob.glob(os.path.join(mask_paths, category, f'*.{MASKS_EXT}')):
@@ -436,11 +366,13 @@ def create_dir_structure(base_dir:str) ->None:
 
     dirs = [
         os.path.join(base_dir, 'train_images'),
-        os.path.join(base_dir, 'train_masks', 'cell'),
-        os.path.join(base_dir, 'train_masks', 'nuclei'),
+        os.path.join(base_dir, 'train_masks', 'Arch'),
+        os.path.join(base_dir, 'train_masks', 'Blackberry'),
+        os.path.join(base_dir, 'train_masks', 'Round'),
         os.path.join(base_dir, 'val_images'),
-        os.path.join(base_dir, 'val_masks', 'cell'),
-        os.path.join(base_dir, 'val_masks', 'nuclei')
+        os.path.join(base_dir, 'val_masks', 'Arch'),
+        os.path.join(base_dir, 'val_masks', 'Blackberry'),
+        os.path.join(base_dir, 'val_masks', 'Round'),
     ]
     for dir in dirs:
         os.makedirs(dir, exist_ok=True)
