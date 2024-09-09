@@ -1,25 +1,48 @@
-# useful to create conda or mamba virtual environnement and installations
-Miniforge >= Miniforge3-22.3.1-0
+## Recommandation to check or install (Project has been implement on ubuntu 20.04 LTS)
 
-# Install the ultralytics package from PyPI (recommended to not have to deal with dependencies)
-!pip install ultralytics
- 
- # Know graphic card features
-  sudo lshw -enable pci -class display # as sudo user
-  or 
-  lspci -vnn | grep -A 12 '\[030[02]\]' | grep -Ei "vga|3d|display|kernel"
+    # useful to create conda or mamba virtual environnement and installations
+        Miniforge >= Miniforge3-22.3.1-0
 
-# First nvidia drivers installation on ubuntu 20.04 LTS
-    Add the PPA (Personal Parckages Archices) to your softwares sources
-    sudo add-apt-repository ppa:graphics-drivers/ppa 
-    # Update the packages list
-    sudo apt update
-    # List your devices drivers 
-    ubuntu-drivers devices
-    Pich one of the nvidia drivers then install ( try many if necessary)
+    # Install the ultralytics package from PyPI (recommended to not have to deal with dependencies)
+        !pip install ultralytics
+        If you forked ultralytics GitHub and cloned in your local.
+        From this local directory install Ultrlytics in editable mode to take in account edits.
+            pip install -e .
 
-# update to the latest version if their needed
-    sudo add-apt-repository ppa:graphics-drivers/ppa # idem like line13
-    # update and ugrade
-    sudo apt update && sudo apt upgrade
+     # Know graphic card features
+        sudo lshw -enable pci -class display # as sudo user
+        or 
+        lspci -vnn | grep -A 12 '\[030[02]\]' | grep -Ei "vga|3d|display|kernel"
+
+    # First nvidia drivers installation on ubuntu 20.04 LTS
+        Add the PPA (Personal Parckages Archices) to your softwares sources
+        sudo add-apt-repository ppa:graphics-drivers/ppa 
+        # Update the packages list
+        sudo apt update
+        # List your devices drivers 
+        ubuntu-drivers devices
+        Pich one of the nvidia drivers then install ( try many if necessary)
+
+    # update to the latest version if their needed
+        sudo add-apt-repository ppa:graphics-drivers/ppa # idem like line13
+        # update and ugrade
+        sudo apt update && sudo apt upgrade
+
+# Librairies and Dependency
+
+    numpy               ✅ 1.24.4<2.0.0,>=1.23.0
+    matplotlib          ✅ 3.7.5>=3.3.0
+    opencv-python       ✅ 4.8.0.74>=4.6.0
+    pillow              ✅ 10.2.0>=7.1.2
+    pyyaml              ✅ 6.0.1>=5.3.1
+    requests            ✅ 2.31.0>=2.23.0
+    scipy               ✅ 1.10.1>=1.4.1
+    torch               ✅ 2.2.1>=1.8.0
+    torchvision         ✅ 0.17.1>=0.9.0
+    tqdm                ✅ 4.66.2>=4.64.0
+    psutil              ✅ 5.9.8
+    py-cpuinfo          ✅ 9.0.0
+    pandas              ✅ 2.0.3>=1.1.4
+    seaborn             ✅ 0.13.2>=0.11.0
+    ultralytics-thop    ✅ 2.0.0>=2.0.0
 
