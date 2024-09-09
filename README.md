@@ -8,40 +8,43 @@ Cellpose, the model employed by the Multimodal Imaging Centre (MIC), where my in
 
 ## Recommanded Project folder structure
 
-├── input/           # All input data is stored here.
-│   ├── train_images/
-│   │   ├── image01.png
-│   │   ├── image02.png
-│   │   └── ...
-│   ├── train_masks/        # All binary masks organized in respective sub-directories.
-│   │   ├── class1/
-│   │   │   ├── image01.png
-│   │   │   ├── image02.png
-│   │   │   └── ...
-│   │   ├── class2/
-│   │   │   ├── image01.png
-│   │   │   ├── image02.png
-│   │   │   └── ...
-│   │   ├── class3/
-│   │       ├── image01.png
-│   │       ├── image02.png
-│   │       └── ...
-│   ├── val_images/
-│   │   ├── image05.png
-│   │   ├── image06.png
-│   │   └── ...
-│   └── val_masks/
-│       ├── class1/
-│       │   ├── image05.png
-│       │   ├── image06.png
-│       │   └── ...
-│       ├── class2/
-│       │   ├── image05.png
-│       │   ├── image06.png
-│       │   └── ...
-│       ├── class3/
-│           ├── image05.png
-│           ├── image06.png
-│           └── ...
+├── input/           # All input data is stored here.  
+│   ├── train_images/  
+│   │   ├── image01.png  
+│   │   ├── image02.png  
+│   │   └── ...  
+│   ├── train_masks/        # All binary masks organized in respective sub-directories.  
+│   │   ├── class1/  
+│   │   │   ├── image01.png  
+│   │   │   ├── image02.png  
+│   │   │   └── ...  
+│   │   ├── class2/  
+│   │   │   ├── image01.png  
+│   │   │   ├── image02.png  
+│   │   │   └── ...  
+│   │   ├── class3/  
+│   │       ├── image01.png  
+│   │       ├── image02.png  
+│   │       └── ...  
+│  
+│   ├── val_images/  
+│   │   ├── image05.png  
+│   │   ├── image06.png  
+│   │   └── ...  
+│   └── val_masks/  
+│       ├── class1/  
+│       │   ├── image05.png  
+│       │   ├── image06.png  
+│       │   └── ...  
+│       ├── class2/  
+│       │   ├── image05.png  
+│       │   ├── image06.png  
+│       │   └── ...  
+│       ├── class3/  
+│           ├── image05.png  
+│           ├── image06.png  
+│           └── ...  
+│  
 └── ...
+
 
