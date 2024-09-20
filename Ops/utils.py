@@ -18,13 +18,49 @@ from ultralytics import YOLO
 from IPython.display import display, Image
 from IPython import display
 import glob
-import os
-import random
-import os
-import glob
-import cv2
-import json
 import shutil
+
+
+def convert_images_from_32bits(directory: str) -> None:
+    """
+    Convert all 32-bit images in a specified directory to 16-bit format and save them as .tif files if not already in that format.
+    
+    This function processes all image files in the directory, checking for their bit depth. If an image is in 32-bit mode ('I' or 'F'),
+    it converts the image to 16-bit ('I;16B') and saves the result. If the image is not in .tif format, it saves the converted image as a .tif file.
+    
+    Args:
+        directory (str): The directory containing the images to be converted.
+
+    Returns:
+        None: Converted images are saved as .tif files, replacing the original files if they were already in .tif format, or creating new .tif versions otherwise.
+
+    Supported formats:
+        The function processes common image formats like .png, .jpg, .jpeg, .tiff, .bmp, etc.
+    """
+    
+    # Supported image file formats
+    valid_extensions = ('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')
+
+    # Iterate over all the files in the directory
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        
+        # Check if the file is an image
+        if filename.lower().endswith(valid_extensions) or filename.lower().endswith('.tif'):
+            # Open the image
+            with Image.open(file_path) as img:
+                # Check if the image is in 32-bit mode
+                if img.mode == 'I' or img.mode == 'F':
+                    # Convert the image to 16-bit
+                    img_16bit = img.convert('I;16B')
+                    
+                    # Save the image in .tif format, even if it's not a .tif file
+                    new_filename = filename if filename.lower().endswith('.tif') else f"{os.path.splitext(filename)[0]}.tif"
+                    new_file_path = os.path.join(directory, new_filename)
+                    
+                    # Save the converted image as .tif
+                    img_16bit.save(new_file_path)
+                    print(f"Converted {file_path} to 16-bit and saved as {new_file_path}.")
         
 def display_images_with_annotations(image_paths, annotation_paths):
 
@@ -75,7 +111,7 @@ def display_images_with_annotations(image_paths, annotation_paths):
     plt.tight_layout()
     plt.show()
 
-def convert_to_yolo(input_images_path, input_json_path, output_images_path, output_labels_path):
+def convert_to_yolo(input_images_path:str, input_json_path:str, output_images_path:str, output_labels_path:str) -> None:
 
     """
         Converts image annotations from COCO format to YOLO format and copies images to a new directory.
@@ -162,7 +198,7 @@ def convert_to_yolo(input_images_path, input_json_path, output_images_path, outp
                     file_object.write(f"{current_category} " + " ".join(normalized_polygon) + "\n")
 
 
-def create_yaml(input_json_path, output_yaml_path, train_path, val_path, test_path=None):
+def create_yaml(input_json_path, output_yaml_path, train_path, val_path, test_path=None) -> None:
 
     """
         Creates a YAML file for the dataset based on the input JSON file.
@@ -353,27 +389,40 @@ def process_masks(mask_paths: str, output_dir: str, category_ids:dict, MASKS_EXT
     print("Created %d annotations for images in folder: %s" % (len(annotations), mask_paths))
 
 
-def create_dir_structure(base_dir:str) ->None:
-
-    """Create the directory structure for train and validation sets.
+def create_dir_structure(base_dir: str, classes: list) -> None:
+    """
+    Create the directory structure for training and validation sets.
+    
     Args:
-        base_dir: Directory we want to host the train and validation sets.
+        base_dir: The base directory where the training and validation sets will be hosted.
+        classes: A list of class names for which subdirectories will be created under 'train_masks' and 'val_masks'.
+    
+    Returns: 
+        None. The function creates folders to build the desired directory structure for the dataset.
+        
+    The resulting structure will contain:
+        - train_images: Directory for storing training images.
+        - train_masks/[class]: Subdirectories for storing training masks for each class.
+        - val_images: Directory for storing validation images.
+        - val_masks/[class]: Subdirectories for storing validation masks for each class.
 
-    Return: None, but create folders to build desired structure
-
-
+    # Exemple d'utilisation
+    base_dir = '/path/to/dataset'
+    classes = ['Arch', 'Blackberry', 'Round']
+    create_dir_structure(base_dir, classes)
     """
 
     dirs = [
         os.path.join(base_dir, 'train_images'),
-        os.path.join(base_dir, 'train_masks', 'Arch'),
-        os.path.join(base_dir, 'train_masks', 'Blackberry'),
-        os.path.join(base_dir, 'train_masks', 'Round'),
         os.path.join(base_dir, 'val_images'),
-        os.path.join(base_dir, 'val_masks', 'Arch'),
-        os.path.join(base_dir, 'val_masks', 'Blackberry'),
-        os.path.join(base_dir, 'val_masks', 'Round'),
     ]
+    
+    # Ajoute les répertoires de masques pour chaque classe
+    for class_name in classes:
+        dirs.append(os.path.join(base_dir, 'train_masks', class_name))
+        dirs.append(os.path.join(base_dir, 'val_masks', class_name))
+
+    # Création des répertoires
     for dir in dirs:
         os.makedirs(dir, exist_ok=True)
 
@@ -396,7 +445,7 @@ def split_data(input_dir:str, output_dir:str, categories:list, val_ratio=0.2) ->
                 output_directory = HOME + "/input"
                 split_data(input_directory, output_directory, categories=['cell', 'nuclei'])
     """
-    create_dir_structure(output_dir)
+    create_dir_structure(output_dir, classes=categories)
     
     train_images_dir = os.path.join(input_dir, 'images')
     print(f"train_images_dir: {train_images_dir}")
