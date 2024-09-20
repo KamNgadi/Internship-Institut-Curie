@@ -5,9 +5,9 @@
 
     # Install the ultralytics package from PyPI (recommended to not have to deal with dependencies)
         !pip install ultralytics
-        If you forked ultralytics GitHub and cloned in your local.
-        From this local directory install Ultrlytics in editable mode to take in account edits.
-            pip install -e .
+    #If you forked ultralytics GitHub and cloned in your local.
+    #From this local directory install Ultrlytics in editable mode to take in account edits.
+        pip install -e .
 
      # Know graphic card features
         sudo lshw -enable pci -class display # as sudo user
